@@ -153,6 +153,14 @@ function formatAmenity(amenity) {
             return 'Biblioteca';
         case 'bus_station':
             return 'Estação de Ônibus';
+        case 'atm':
+            return 'Caixa Eletrônico';
+        case 'fast_food':
+            return 'Fast Food';
+        case 'nightclub':
+            return 'Clube Noturno';
+        case 'shopping_mall':
+            return 'Shopping Center';
         default:
             return 'Categoria desconhecida';
     }
