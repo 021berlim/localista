@@ -63,18 +63,20 @@ async function getCoordinates(address) {
 }
 
 async function getNearbyPlaces(lat, lon, radius, category) {
-    const categoryQuery = category ? `[amenity~'${category}']` : '[amenity]';
+    const categoryQuery = category ? `[amenity~'${category}', i]` : '[amenity]';
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:${radius},${lat},${lon})${categoryQuery};out;`;
 
     try {
         const response = await fetch(overpassUrl);
         const data = await response.json();
-        return data.elements;
+        console.log(data.elements);
+        return data.elements.filter(place => place.tags && place.tags.amenity && place.tags.amenity.toLowerCase() === category.toLowerCase());
     } catch (error) {
         console.error('Erro ao buscar locais:', error);
         return [];
     }
 }
+
 
 async function displayResults(places) {
     const resultDiv = document.getElementById('result');
