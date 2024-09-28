@@ -1,7 +1,6 @@
 document.getElementById('searchBtn').addEventListener('click', async () => {
     const address = document.getElementById('address').value;
     const category = document.getElementById('category').value;
-
     if (address) {
         const coordinates = await getCoordinates(address);
         if (coordinates) {
@@ -14,18 +13,29 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
         alert('Por favor, insira um endereço ou use a geolocalização.');
     }
 });
-
 document.getElementById('geoLocateBtn').addEventListener('click', async () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             const category = document.getElementById('category').value;
-
             const places = await getNearbyPlaces(lat, lon, 2000, category);
             await displayResults(places);
-        }, () => {
-            alert('Não foi possível obter sua localização.');
+        }, (error) => {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert('Usuário negou a solicitação de Geolocalização.');
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert('Localização indisponível.');
+                    break;
+                case error.TIMEOUT:
+                    alert('A solicitação para obter a localização do usuário expirou.');
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert('Um erro desconhecido ocorreu.');
+                    break;
+            }
         });
     } else {
         alert('Geolocalização não é suportada pelo seu navegador.');
@@ -54,7 +64,7 @@ async function getCoordinates(address) {
 
 async function getNearbyPlaces(lat, lon, radius, category) {
     const categoryQuery = category ? `[amenity~'${category}']` : '[amenity]';
-    const overpassUrl = `http://overpass-api.de/api/interpreter?data=[out:json];node(around:${radius},${lat},${lon})${categoryQuery};out;`;
+    const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:${radius},${lat},${lon})${categoryQuery};out;`;
 
     try {
         const response = await fetch(overpassUrl);
