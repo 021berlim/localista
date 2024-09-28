@@ -66,11 +66,14 @@ async function getNearbyPlaces(lat, lon, radius, category) {
     const categoryQuery = category ? `[amenity~'${category}', i]` : '[amenity]';
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:${radius},${lat},${lon})${categoryQuery};out;`;
 
+    // console.log('Overpass URL:', overpassUrl);
+
     try {
         const response = await fetch(overpassUrl);
         const data = await response.json();
-        console.log(data.elements);
-        return data.elements.filter(place => place.tags && place.tags.amenity && place.tags.amenity.toLowerCase() === category.toLowerCase());
+        // console.log('Dados retornados da API:', data.elements);
+        
+        return data.elements.filter(place => place.tags && place.tags.amenity);
     } catch (error) {
         console.error('Erro ao buscar locais:', error);
         return [];
