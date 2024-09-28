@@ -17,4 +17,4 @@ Localista é uma aplicação web que permite aos usuários buscar locais próxim
 1. **Clone o repositório**:
    ```bash
    git clone <URL do repositório>
-   cd localista´´´
+   cd localista
