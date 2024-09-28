@@ -53,6 +53,7 @@ async function getCoordinates(address) {
 }
 
 async function getNearbyPlaces(lat, lon, radius, category) {
+    // Use um filtro para permitir todos os lugares se a categoria não for selecionada
     const categoryQuery = category ? `[amenity~'${category}']` : '[amenity]';
     const overpassUrl = `http://overpass-api.de/api/interpreter?data=[out:json];node(around:${radius},${lat},${lon})${categoryQuery};out;`;
 
